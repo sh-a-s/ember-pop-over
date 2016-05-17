@@ -45,6 +45,13 @@ const classify = function (template) {
 };
 
 export default Ember.Component.extend({
+  activeClass: null,
+
+  onShowCallback: null,
+
+  onHideCallback: null,
+
+  onTileCallback: null,
 
   active: false,
 
@@ -80,6 +87,18 @@ export default Ember.Component.extend({
       target: target,
       _viewRegistry: getOwner(this).lookup('-view-registry:main')
     }));
+  },
+
+  addActiveClass() {
+    var $target = Ember.$(Ember.get(this, 'activeTarget.element'));
+    $target.addClass(Ember.get(this, 'activeClass'));
+  },
+
+  removeActiveClass() {
+    var $targets = Ember.$(Ember.get(this, 'targets'));
+    $targets.each((i, el) => {
+      Ember.$(el.element).removeClass(Ember.get(this, 'activeClass'));
+    });
   },
 
   targets: computed({
@@ -242,11 +261,27 @@ export default Ember.Component.extend({
   })),
 
   hide() {
+    if (this.activeClass != null) {
+      this.removeActiveClass();
+    }
+    let onHideCallback = this.get('onHideCallback');
+    if (typeof onHideCallback === 'function') {
+      onHideCallback();
+    }
+
     if (this.isDestroyed) { return; }
     set(this, 'active', false);
   },
 
   show() {
+    if (this.activeClass != null) {
+      this.addActiveClass();
+    }
+    let onShowCallback = this.get('onShowCallback');
+    if (typeof onShowCallback === 'function') {
+      onShowCallback();
+    }
+
     if (this.isDestroyed) { return; }
     set(this, 'active', true);
   },
@@ -313,6 +348,11 @@ export default Ember.Component.extend({
       });
       scheduleOnce('afterRender', this, 'positionPointer', $popover, pointerRect);
     }
+
+    let onTileCallback = this.get('onTileCallback');
+    if (typeof onTileCallback === 'function') {
+      onTileCallback();
+    }
   },
 
   positionPointer($compass, pointerRect) {
@@ -326,5 +366,4 @@ export default Ember.Component.extend({
       left: pointerRect.left + 'px'
     });
   }
-
 });
