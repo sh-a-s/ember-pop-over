@@ -1,7 +1,7 @@
 import Ember from "ember";
 import Flow from "ember-pop-over/system/flow";
 import config from "../config/environment";
-import * as flows from "../flows";
+import * as flows from "ember-pop-over/system/flows";
 
 const get = Ember.get;
 const keys = Object.keys;
