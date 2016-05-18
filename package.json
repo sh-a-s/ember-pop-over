@@ -1,6 +1,6 @@
 {
   "name": "ember-ext-pop-over",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A constraint-based pop-over component for ember apps",
   "directories": {
     "doc": "doc",
